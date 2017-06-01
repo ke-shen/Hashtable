@@ -8,22 +8,30 @@
 #define DELETE 3
 #define EXIT 4
 
+#include "HashTable.h"
+#include <time.h>       /* time */
+#include <math.h>
+#include <stdlib.h>
+  #include <fstream>
+
 using namespace std;
 
 int main() {
+  srand (time(NULL));
 
-  cout << "Enter a string: "  << flush;
-  char* input = new char[80];
-  cin >> input;
+  HashTable* ht = new HashTable(100);
+  int randInt = rand() % 100000 + 1;
+  cout << "Hashing " << randInt << " : " <<  ht->hash(randInt) << flush;
+  ifstream firstnames("first.txt");
+  ifstream lastnames("last.txt");
 
-  long hash = 5381;
-  int c;
-  while (c = *input++) hash = ((hash << 5) + hash) + c; // hash*33 + c
-
-  hash = hash % 100;
-  cout << "Hash: " << hash << flush;
-
-  return 0;
+  for(int i = 0 i < 310; i++) {
+    char first[80];
+    char last[80];
+    firstnames.getline(first, 1000, '\n');
+    secondnames.getline(last, 1000, '\n');
+    
+  }
 }
 
 /*

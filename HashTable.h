@@ -16,12 +16,13 @@ private:
     int length;
 
     // Returns an array location for a given item key.
-    int hash( string itemKey );
+
 
 public:
+    int hash( int id );
     // Constructs the empty Hash Table object.
     // Array length is set to 13 by default.
-    HashTable( int tableLength = 13 );
+    HashTable( int tableLength );
 
     // Adds an item to the Hash Table.
     void insertStudent(Student * newStudent );
@@ -44,7 +45,7 @@ public:
     int getLength();
 
     // Returns the number of Items in the Hash Table.
-    int getNumberOfItems();
+    int numStudents();
 
     // De-allocates all memory used for the Hash Table.
     ~HashTable();
