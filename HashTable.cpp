@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>     /* calloc, exit, free */
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 // Constructs the empty Hash Table object.
@@ -17,8 +18,10 @@ HashTable::HashTable(int tableLength)
 }
 
 // Returns an array location (hash location) for a given student id
-int HashTable::hash(int id)
+
+int HashTable::hash(char* name)
 {
+    /*
     int n = log10(id) + 1;
     int i;
     char* numberArray = new char[80];
@@ -26,22 +29,31 @@ int HashTable::hash(int id)
       {
           numberArray[i] = id % 10;
     }
+    */
     long hash = 5381;
     int c;
-    while (c = *numberArray++) hash = ((hash << 5) + hash) + c; // hash*33 + c
+    while (c = *name++) hash = ((hash << 5) + hash) + c; // hash*33 + c
     hash = hash % 100;
     return hash;
 }
 
 // Adds an item to the Hash Table.
-void HashTable::insertStudent(Student * newStudent )
+void HashTable::insertStudent(Student * newStudent)
 {
-    int index = hash( newStudent -> id );
+    char* name = new char[100];
+    strncat(name, newStudent->first, strlen(newStudent->first));
+    strncat(name, newStudent->last, strlen(newStudent->last));
+
+    int index = hash(name);
+    cout << "Index : " << index << endl;
+
     array[ index ].insertStudent( newStudent );
+    delete [] name;
 }
 
 // Deletes an Item by key from the Hash Table.
 // Returns true if the operation is successful.
+/*
 bool HashTable::removeStudent(int id)
 {
     int index = hash( id );
@@ -55,7 +67,7 @@ Student * HashTable::getStudentById( int id )
     int index = hash( id );
     return array[ index ].getStudent( id );
 }
-
+*/
 // Display the contents of the Hash Table to console window.
 void HashTable::printTable()
 {

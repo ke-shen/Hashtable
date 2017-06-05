@@ -9,6 +9,7 @@
 #define EXIT 4
 
 #include "HashTable.h"
+#include "LinkedList.h"
 #include <time.h>       /* time */
 #include <math.h>
 #include <stdlib.h>
@@ -20,11 +21,9 @@ void generateStudents(HashTable* h, char** first_arr,char ** last_arr,int& idnum
 
 
 int main() {
-  srand (time(NULL));
 
   HashTable* ht = new HashTable(100);
-  int randInt = rand() % 100000 + 1;
-  cout << "Hashing " << randInt << " : " <<  ht->hash(randInt) << endl;
+  
 
   ifstream fn("first.txt");
   ifstream ln("last.txt");
@@ -47,6 +46,7 @@ int main() {
   int idnumber = 100000;
 
   generateStudents(ht, first_arr,last_arr,idnumber);
+  ht->printHistogram();
 
   return 0;
 }
@@ -63,12 +63,13 @@ void generateStudents(HashTable* ht,
   cout << "Generate how many students? " << flush;
   cin >> input;
 
+  cout << ht->getLength() << endl;
   srand(time(NULL));
   for(int i = 0; i < atoi(input); i++)
   {
     int rand_index = rand() % 310;
 
-    Student* student = new Student;
+    Student* student = new Student();
 
     student->first = first_arr[rand_index];
     student->last = last_arr[rand_index];
@@ -76,6 +77,7 @@ void generateStudents(HashTable* ht,
     student->gpa = rand() % 4;
 
     ht->insertStudent(student);
+    cout << "student data: " << student->first << endl;
   }
 
   cout << atoi(input) << " students generated." << endl;

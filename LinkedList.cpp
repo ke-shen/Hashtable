@@ -6,26 +6,23 @@ using namespace std;
 // Creates the head node and sets length to zero.
 LinkedList::LinkedList()
 {
-    head = new Student;
-    head->next = NULL;
+    head = NULL;
     length = 0;
 }
 
 // Inserts an Student at the end of the list.
-void LinkedList::insertStudent(Student * newStudent )
+void LinkedList::insertStudent(Student * newStudent)
 {
-    if (!head->next)
+    if (!head)
     {
-        head->next = newStudent;
+        head = newStudent;
         length++;
         return;
     }
     Student* p = head;
-    Student* q = head;
-    while (q)
+    while (p->next)
     {
-        p = q;
-        q = p->next;
+        p = p->next;
     }
     p->next = newStudent;
     newStudent->next = NULL;
