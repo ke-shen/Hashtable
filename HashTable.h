@@ -19,7 +19,7 @@ private:
 
 
 public:
-    int hash( char* name );
+    unsigned int hash( char* name );
     // Constructs the empty Hash Table object.
     // Array length is set to 13 by default.
     HashTable( int tableLength );

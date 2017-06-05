@@ -23,7 +23,7 @@ void generateStudents(HashTable* h, char** first_arr,char ** last_arr,int& idnum
 int main() {
 
   HashTable* ht = new HashTable(100);
-  
+
 
   ifstream fn("first.txt");
   ifstream ln("last.txt");
@@ -54,10 +54,7 @@ int main() {
 void addStudent(HashTable* ht);
 
 //generates a number of students and puts them into the hashtable
-void generateStudents(HashTable* ht,
-                        char** first_arr,
-                        char ** last_arr,
-                        int& idnumber)
+void generateStudents(HashTable* ht, char** first_arr, char** last_arr, int& idnumber)
 {
   char input[10];
   cout << "Generate how many students? " << flush;

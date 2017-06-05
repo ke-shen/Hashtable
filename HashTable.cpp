@@ -19,7 +19,7 @@ HashTable::HashTable(int tableLength)
 
 // Returns an array location (hash location) for a given student id
 
-int HashTable::hash(char* name)
+unsigned int HashTable::hash(char* name)
 {
     /*
     int n = log10(id) + 1;
@@ -30,11 +30,15 @@ int HashTable::hash(char* name)
           numberArray[i] = id % 10;
     }
     */
-    long hash = 5381;
-    int c;
-    while (c = *name++) hash = ((hash << 5) + hash) + c; // hash*33 + c
-    hash = hash % 100;
-    return hash;
+    unsigned int hash = 0;
+    unsigned char* p;
+
+
+    for(p = (unsigned char*)name; *p != '\0'; p++) {
+      hash = 37 * hash + *p;
+    }
+
+    return hash % 100;
 }
 
 // Adds an item to the Hash Table.
