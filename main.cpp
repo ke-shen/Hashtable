@@ -12,26 +12,73 @@
 #include <time.h>       /* time */
 #include <math.h>
 #include <stdlib.h>
-  #include <fstream>
+#include <fstream>
 
 using namespace std;
+
+void generateStudents(HashTable* h, char** first_arr,char ** last_arr,int& idnumber);
+
 
 int main() {
   srand (time(NULL));
 
   HashTable* ht = new HashTable(100);
   int randInt = rand() % 100000 + 1;
-  cout << "Hashing " << randInt << " : " <<  ht->hash(randInt) << flush;
-  ifstream firstnames("first.txt");
-  ifstream lastnames("last.txt");
+  cout << "Hashing " << randInt << " : " <<  ht->hash(randInt) << endl;
 
-  for(int i = 0 i < 310; i++) {
-    char first[80];
-    char last[80];
-    firstnames.getline(first, 1000, '\n');
-    secondnames.getline(last, 1000, '\n');
-    
+  ifstream fn("first.txt");
+  ifstream ln("last.txt");
+
+  char** first_arr = new char*[1000];
+  char** last_arr = new char*[1000];
+
+  //reads in names in the files to an an array
+  for(int i = 0; i < 310; i++) {
+    char* first = new char[80];
+    char* last = new char[80];
+    fn.getline(first, 80, '\r');
+    fn.ignore(1);
+    ln.getline(last, 80, '\r');
+    ln.ignore(1);
+    first_arr[i] = first;
+    last_arr[i] = last;
   }
+
+  int idnumber = 100000;
+
+  generateStudents(ht, first_arr,last_arr,idnumber);
+
+  return 0;
+}
+
+void addStudent(HashTable* ht);
+
+//generates a number of students and puts them into the hashtable
+void generateStudents(HashTable* ht,
+                        char** first_arr,
+                        char ** last_arr,
+                        int& idnumber)
+{
+  char input[10];
+  cout << "Generate how many students? " << flush;
+  cin >> input;
+
+  srand(time(NULL));
+  for(int i = 0; i < atoi(input); i++)
+  {
+    int rand_index = rand() % 310;
+
+    Student* student = new Student;
+
+    student->first = first_arr[rand_index];
+    student->last = last_arr[rand_index];
+    student->id = idnumber++;
+    student->gpa = rand() % 4;
+
+    ht->insertStudent(student);
+  }
+
+  cout << atoi(input) << " students generated." << endl;
 }
 
 /*

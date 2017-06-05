@@ -7,8 +7,8 @@
 //Student structs are student "nodes" with all the information of a student
 //but also with a pointer to the next Student
 struct Student {
-	char first[80];
-	char last[80];
+	char*first;
+	char* last;
 	int id;
 	float gpa;
   Student* next;
