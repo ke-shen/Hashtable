@@ -21,18 +21,8 @@ HashTable::HashTable(int tableLength)
 
 unsigned int HashTable::hash(char* name)
 {
-    /*
-    int n = log10(id) + 1;
-    int i;
-    char* numberArray = new char[80];
-    for ( i = 0; i < n; ++i, id /= 10 )
-      {
-          numberArray[i] = id % 10;
-    }
-    */
     unsigned int hash = 0;
     unsigned char* p;
-
 
     for(p = (unsigned char*)name; *p != '\0'; p++) {
       hash = 37 * hash + *p;
@@ -64,7 +54,7 @@ bool HashTable::removeStudent(int id)
     return array[ index ].removeStudent( id );
 }
 
-// Returns an item from the Hash Table by key.
+// Returns an student from the Hash Table by key.
 // If the student isn't found, a null pointer is returned.
 Student * HashTable::getStudentById( int id )
 {

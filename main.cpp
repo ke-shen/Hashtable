@@ -17,14 +17,14 @@
 
 using namespace std;
 
-void generateStudents(HashTable* h, char** first_arr,char ** last_arr,int& idnumber);
+void generateStudents(HashTable* ht, char** first_arr,char ** last_arr,int& idnumber);
 
 
 int main() {
 
+
+
   HashTable* ht = new HashTable(100);
-
-
   ifstream fn("first.txt");
   ifstream ln("last.txt");
 
@@ -44,6 +44,34 @@ int main() {
   }
 
   int idnumber = 100000;
+
+  char input[100];
+
+	bool done = false;
+	while(!done) {
+		cout << "Do you want to: ADD, DELETE, PRINT or EXIT?" << endl;
+		input = getInput();
+		switch(parseCommand(input)) {
+			case ADD:
+				addEntry(list);
+				break;
+			case DELETE:
+			//if it returns 1, there is such an entry;
+				deleteEntry(list);
+				break;
+			case PRINT:
+				printAll(list);
+				break;
+			case EXIT:
+				continueoperations = false;
+				break;
+			case 0:
+				cout << "You didn't enter a valid command. \n";
+				break;
+		}
+
+	}
+
 
   generateStudents(ht, first_arr,last_arr,idnumber);
   ht->printHistogram();
@@ -80,43 +108,8 @@ void generateStudents(HashTable* ht, char** first_arr, char** last_arr, int& idn
   cout << atoi(input) << " students generated." << endl;
 }
 
-/*
-int parseCommand(char*input);
-void addEntry(vector<Student*> *list);
-void deleteEntry(vector<Student*> *list);
-void printAll(vector<Student*> *list);
 
-int main() {
-	char *input;
-	vector<Student*> *list = new vector<Student*>();
-	bool continueoperations = true;
-	while(continueoperations == true) {
-		cout << "Do you want to: ADD, DELETE, PRINT or EXIT?" << endl;
-		input = getInput();
-		switch(parseCommand(input)) {
-			case ADD:
-				addEntry(list);
-				break;
-			case DELETE:
-			//if it returns 1, there is such an entry;
-				deleteEntry(list);
-				break;
-			case PRINT:
-				printAll(list);
-				break;
-			case EXIT:
-				continueoperations = false;
-				break;
-			case 0:
-				cout << "You didn't enter a valid command. \n";
-				break;
-		}
 
-	}
-
-return 0;
-
-}
 //prints all the students currently in the directory
 void printAll(vector<Student*> *list) {
  	if(list->size() == 0) {
