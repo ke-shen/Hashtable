@@ -63,7 +63,7 @@ int main() {
 				printAll(list);
 				break;
 			case EXIT:
-				continueoperations = false;
+				done = true;
 				break;
 			case 0:
 				cout << "You didn't enter a valid command. \n";
@@ -139,99 +139,66 @@ int parseCommand(char *input) {
 	}
 }
 //adds a student the vector: list.
-void addEntry(vector<Student*> *list) {
-	bool valid;
-	Student *student = new Student();
-	while(!valid) {
-		cout << "Enter first name: ";
-		cin >> student->first;
-		if(!cin.fail()) {
-			valid = true;
-		} else {
-			cout << "Invalid input. Enter a string." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
+void addEntry(HashTable* ht) {
+	Student *student = new Student;
 
-	}
-	cin.clear();
-	valid = false;
+	cout << "Enter first name: ";
+	cin >> student->first;
 
-	//deals with last name
+
 	cout << "Enter last name: ";
-	while(!valid) {
-		cin >> student->last;
-		if(!cin.fail()) {
-			valid = true;
-		} else {
-			cout << "Invalid input. Enter a string." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
+  cin >> student->last;
 
-	}
-	cin.clear();
-	valid = false;
 
-	//deals with id
 	cout << "Enter ID number: ";
-	while(!valid) {
-		cin >> student->id;
-		if(!cin.fail()) {
-				valid = true;
-		} else {
-			cout << "Invalid input. Enter an integer." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
-	}
-	cin.clear();
-	//deals with gpa
-	valid = false;
-	cout << "Enter GPA: ";
-	while(!valid) {
-		cin >> student->gpa;
-		if(!cin.fail()) {
-			valid = true;
-		} else {
-			cout << "Invalid input. Enter a decimal." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
+	cin >> student->id;
 
-	}
-	cin.ignore();
-	list->push_back(student);
+	cout << "Enter GPA: ";
+	cin >> student->gpa;
+
+	ht->insert_Student(student);
 	cout << "Student added." << endl;
 }
 
-//deletes an entry by ID of student
-//returns if successful, if not, outputs that it failed
-void deleteEntry(vector<Student*> *list) {
-	bool valid = false;
-	int id;
-	cout << "Enter the id of the student you want to delete: " << endl;
-	while(!valid) {
-		cin >> id;
-		if(!cin.fail()) {
-			valid = true;
-		} else {
-			cout << "Enter an integer.";
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
+//deletes an entry by their last name
+//if there is the same last name, returns all students with that name
+void deleteEntry(HashTable* ht) {
+	char name[100];
+	cout << "Enter the last name of the student you want to delete: " << endl;
+	cin >> name;
+  int index = ht->hash(name);
+
+  Student* student = ht->array(index);
+
+	//if no head
+	if(student == NULL) {
+		cout << "Student not found";
+		return;
 	}
 
-	for(int i = 0; i < list->size(); i++) {
-		if(list->at(i)->id == id) {
-			list->erase(list->begin() +i);
-			cout << "Deleted student" << endl;
-			cin.ignore();
-			return;
-		}
+  //stops when the next student
+  while(student->next != NULL && strcmp(student->next->name, name) {
+    student = student->next;
+  }
+	//if head is the student to delete
+  Student* temp = student->next;
+  if(!strcmp(temp->name, name)) {
+
+  }
+		student = student->next;
+		delete temp;
+		cout << "Student, " << name << " was just deleted from the system" << endl;
+		return;
 	}
+	else {
+		student = student->next;
+		deleteNode(temp, id);
+		head->setNext(temp);
+	}
+
+
+
 	cout << "Student was not found in database" << endl;
 	cin.ignore();
 
 }
-*/
