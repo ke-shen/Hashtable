@@ -47,21 +47,21 @@ void HashTable::insertStudent(Student * newStudent)
 
 // Deletes an Item by key from the Hash Table.
 // Returns true if the operation is successful.
-/*
-bool HashTable::removeStudent(int id)
+
+bool HashTable::removeStudent(char* name)
 {
-    int index = hash( id );
-    return array[ index ].removeStudent( id );
+    int index = hash( name );
+    return array[ index ].removeStudent( name );
 }
 
 // Returns an student from the Hash Table by key.
 // If the student isn't found, a null pointer is returned.
-Student * HashTable::getStudentById( int id )
+Student * HashTable::getStudentById(char* name)
 {
-    int index = hash( id );
-    return array[ index ].getStudent( id );
+    int index = hash( name );
+    return array[ index ].getStudent( name );
 }
-*/
+
 // Display the contents of the Hash Table to console window.
 void HashTable::printTable()
 {

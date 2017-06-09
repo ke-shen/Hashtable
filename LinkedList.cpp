@@ -31,14 +31,14 @@ void LinkedList::insertStudent(Student * newStudent)
 
 // Removes an Student from the list by Student id.
 // Returns true if the operation is successful.
-bool LinkedList::removeStudent(int id)
+bool LinkedList::removeStudent(char* name)
 {
     if (!head->next) return false;
     Student* p = head;
     Student* q = head;
     while (q)
     {
-        if (q->id == id)
+        if (!strcmp(p->last, name))
         {
             p-> next = q->next;
             delete q;
@@ -54,14 +54,14 @@ bool LinkedList::removeStudent(int id)
 // Searches for an Student by its id.
 // Returns a reference to first match.
 // Returns a NULL pointer if no match is found.
-Student* LinkedList::getStudent(int id)
+Student* LinkedList::getStudent(char* name)
 {
     Student * p = head;
     Student * q = head;
     while (q)
     {
         p = q;
-        if ((p != head) && (p->id == id))
+        if ((p != head) && ((p->last, name)))
             return p;
         q = p -> next;
     }

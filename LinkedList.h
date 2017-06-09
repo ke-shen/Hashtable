@@ -4,6 +4,8 @@
 #ifndef LinkedList_h
 #define LinkedList_h
 
+#include <string.h>
+
 //Student structs are student "nodes" with all the information of a student
 //but also with a pointer to the next Student
 struct Student {
@@ -31,11 +33,11 @@ class LinkedList
 
     //Removes a student by their id number
     //returns true if successful
-    bool removeStudent(int id);
+    bool removeStudent(char* name);
 
     // Searches for a student by its id
     // Returns NULL pointer if no match is found
-    Student* getStudent(int id);
+    Student* getStudent(char * name);
 
     //prints the entire LinkedList
     void printList();

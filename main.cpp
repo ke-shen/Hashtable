@@ -18,7 +18,10 @@
 using namespace std;
 
 void generateStudents(HashTable* ht, char** first_arr,char ** last_arr,int& idnumber);
-
+int parseCommand(char* input);
+void printAll(vector<Student*> *list);
+void addEntry(HashTable* ht);
+void deleteEntry(HashTable* ht);
 
 int main() {
 
@@ -50,17 +53,17 @@ int main() {
 	bool done = false;
 	while(!done) {
 		cout << "Do you want to: ADD, DELETE, PRINT or EXIT?" << endl;
-		input = getInput();
+    cin >> input;
 		switch(parseCommand(input)) {
 			case ADD:
-				addEntry(list);
+				addEntry(ht);
 				break;
 			case DELETE:
 			//if it returns 1, there is such an entry;
-				deleteEntry(list);
+				deleteEntry(ht);
 				break;
 			case PRINT:
-				printAll(list);
+			//	printAll(list);
 				break;
 			case EXIT:
 				done = true;
@@ -109,7 +112,7 @@ void generateStudents(HashTable* ht, char** first_arr, char** last_arr, int& idn
 }
 
 
-
+/*
 //prints all the students currently in the directory
 void printAll(vector<Student*> *list) {
  	if(list->size() == 0) {
@@ -120,6 +123,9 @@ void printAll(vector<Student*> *list) {
 			<< ", " << list->at(i)->gpa << endl;
 	}
 }
+
+
+*/
 //compares the input to known commands
 int parseCommand(char *input) {
 	if(!strcmp(input, "ADD")) {
@@ -156,19 +162,25 @@ void addEntry(HashTable* ht) {
 	cout << "Enter GPA: ";
 	cin >> student->gpa;
 
-	ht->insert_Student(student);
+	ht->insertStudent(student);
 	cout << "Student added." << endl;
 }
 
 //deletes an entry by their last name
 //if there is the same last name, returns all students with that name
 void deleteEntry(HashTable* ht) {
-	char name[100];
-	cout << "Enter the last name of the student you want to delete: " << endl;
+	char* name = new char[100];
+	cout << "Enter the name of the student you want to delete: " << endl;
 	cin >> name;
-  int index = ht->hash(name);
+  if(ht->removeStudent(name)) {
+    cout << "Removed" << endl;
+  }
+  else {
+    cout << "Student not found in the data base.";
+  }
+  /*
 
-  Student* student = ht->array(index);
+  Student* student = ht->array[index];
 
 	//if no head
 	if(student == NULL) {
@@ -200,5 +212,5 @@ void deleteEntry(HashTable* ht) {
 
 	cout << "Student was not found in database" << endl;
 	cin.ignore();
-
+*/
 }

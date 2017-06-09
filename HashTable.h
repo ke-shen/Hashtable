@@ -29,11 +29,11 @@ public:
 
     // Deletes an Item by key from the Hash Table.
     // Returns true if the operation is successful.
-    bool removeStudent(int id);
+    bool removeStudent(char* name);
 
     // Returns an item from the Hash Table by key.
     // If the item isn't found, a null pointer is returned.
-    Student* getStudentById(int id);
+    Student* getStudentById(char* name);
 
     // Display the contents of the Hash Table to console window.
     void printTable();
