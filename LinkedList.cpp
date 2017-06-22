@@ -11,13 +11,14 @@ LinkedList::LinkedList()
 }
 
 // Inserts an Student at the end of the list.
-void LinkedList::insertStudent(Student * newStudent)
+// returns length to the hashtable function in order to
+// know when to expand the hashtable
+int LinkedList::insertStudent(Student * newStudent)
 {
     if (!head)
     {
         head = newStudent;
-        length++;
-        return;
+        return ++length;
     }
     Student* p = head;
     while (p->next)
@@ -26,27 +27,43 @@ void LinkedList::insertStudent(Student * newStudent)
     }
     p->next = newStudent;
     newStudent->next = NULL;
-    length++;
+    return ++length;
+}
+
+//returns the student at the head of the LinkedList and also unlinks it from this HT
+Student* LinkedList::popStudent() {
+    if(head) {
+    Student* temp = head;
+    head = head->next;
+    return temp;
+    }
+    return NULL;
 }
 
 // Removes an Student from the list by Student id.
 // Returns true if the operation is successful.
 bool LinkedList::removeStudent(char* name)
 {
-    if (!head->next) return false;
-    Student* p = head;
-    Student* q = head;
-    while (q)
+    if (!head) return false;
+    if(!strcmp(head->last, name)) {
+        Student* p = head;
+        head = head->next;
+        delete p;
+        length--;
+        return true;
+    }
+    
+    while (head->next)
     {
-        if (!strcmp(p->last, name))
+        //if the next node is the one to delete
+        if (!strcmp(head->next->last, name))
         {
-            p-> next = q->next;
-            delete q;
+            Student* p = head->next;
+            head->next = head->next->next;
+            delete p;
             length--;
             return true;
         }
-        p = q;
-        q = p->next;
     }
     return false;
 }
@@ -56,14 +73,12 @@ bool LinkedList::removeStudent(char* name)
 // Returns a NULL pointer if no match is found.
 Student* LinkedList::getStudent(char* name)
 {
-    Student * p = head;
     Student * q = head;
     while (q)
     {
-        p = q;
-        if ((p != head) && ((p->last, name)))
-            return p;
-        q = p -> next;
+        if (!strcmp(q->last, name))
+            return q;
+        q = q -> next;
     }
     return NULL;
 }

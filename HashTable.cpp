@@ -21,28 +21,25 @@ HashTable::HashTable(int tableLength)
 
 unsigned int HashTable::hash(char* name)
 {
-    unsigned int hash = 0;
+    long hash = 0;
     unsigned char* p;
 
     for(p = (unsigned char*)name; *p != '\0'; p++) {
-      hash = 37 * hash + *p;
+      hash = 33 * hash + *p;
     }
 
-    return hash % 100;
+    return hash % getLength();
 }
 
 // Adds an item to the Hash Table.
-void HashTable::insertStudent(Student * newStudent)
+bool HashTable::insertStudent(Student * newStudent)
 {
-    char* name = new char[100];
-    strncat(name, newStudent->first, strlen(newStudent->first));
-    strncat(name, newStudent->last, strlen(newStudent->last));
 
-    int index = hash(name);
-    cout << "Index : " << index << endl;
+    int index = hash(newStudent->last);
+    cout << "Index of insert hash: " << index << endl;
 
-    array[ index ].insertStudent( newStudent );
-    delete [] name;
+    if(array[ index ].insertStudent( newStudent ) > 3) return true;
+    return false;
 }
 
 // Deletes an Item by key from the Hash Table.
@@ -56,9 +53,10 @@ bool HashTable::removeStudent(char* name)
 
 // Returns an student from the Hash Table by key.
 // If the student isn't found, a null pointer is returned.
-Student * HashTable::getStudentById(char* name)
+Student * HashTable::getStudent(char* name)
 {
     int index = hash( name );
+    cout << "Search hash value: " << index << endl;
     return array[ index ].getStudent( name );
 }
 

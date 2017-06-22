@@ -19,19 +19,22 @@ struct Student {
 class LinkedList
 {
   private:
-    //reference to the list of students
-    Student* head;
 
     //number of students
     int length;
 
   public:
+    
+    //reference to the list of students
+    Student* head;
+
     LinkedList();
 
     //Insert a Student at the end of the list.
-    void insertStudent(Student * newStudent);
+    int insertStudent(Student * newStudent);
 
-    //Removes a student by their id number
+    Student* popStudent();
+    //Removes a student by their last name
     //returns true if successful
     bool removeStudent(char* name);
 

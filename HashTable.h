@@ -9,23 +9,20 @@
 class HashTable
 {
 private:
-    // Array is a reference to an array of Linked Lists.
-    LinkedList* array;
-
     // Length is the size of the HashTable array.
     int length;
 
-    // Returns an array location for a given item key.
-
-
 public:
+    // Array is a reference to an array of Linked Lists.
+    LinkedList* array;
+    
     unsigned int hash( char* name );
     // Constructs the empty Hash Table object.
     // Array length is set to 13 by default.
     HashTable( int tableLength );
 
     // Adds an item to the Hash Table.
-    void insertStudent(Student * newStudent );
+    bool insertStudent(Student * newStudent );
 
     // Deletes an Item by key from the Hash Table.
     // Returns true if the operation is successful.
@@ -33,7 +30,7 @@ public:
 
     // Returns an item from the Hash Table by key.
     // If the item isn't found, a null pointer is returned.
-    Student* getStudentById(char* name);
+    Student* getStudent(char* name);
 
     // Display the contents of the Hash Table to console window.
     void printTable();

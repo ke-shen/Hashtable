@@ -7,6 +7,8 @@
 #define PRINT 2
 #define DELETE 3
 #define EXIT 4
+#define SEARCH 5
+#define GENERATE 6
 
 #include "HashTable.h"
 #include "LinkedList.h"
@@ -14,18 +16,20 @@
 #include <math.h>
 #include <stdlib.h>
 #include <fstream>
+#include <cstring>
 
 using namespace std;
 
 void generateStudents(HashTable* ht, char** first_arr,char ** last_arr,int& idnumber);
 int parseCommand(char* input);
-void printAll(vector<Student*> *list);
+void printAll(HashTable* ht);
 void addEntry(HashTable* ht);
 void deleteEntry(HashTable* ht);
+void searchEntry(HashTable* ht);
+void printInfo(Student* stu);
+HashTable* makeNewThing(HashTable* ht);
 
 int main() {
-
-
 
   HashTable* ht = new HashTable(100);
   ifstream fn("first.txt");
@@ -52,22 +56,28 @@ int main() {
 
 	bool done = false;
 	while(!done) {
-		cout << "Do you want to: ADD, DELETE, PRINT or EXIT?" << endl;
-    cin >> input;
+		cout << "Do you want to: ADD, DELETE, SEARCH, PRINT or EXIT?" << endl;
+        cin >> input;
 		switch(parseCommand(input)) {
 			case ADD:
 				addEntry(ht);
 				break;
 			case DELETE:
-			//if it returns 1, there is such an entry;
+                //if it returns 1, there is such an entry;
 				deleteEntry(ht);
 				break;
-			case PRINT:
-			//	printAll(list);
+			case SEARCH:
+                searchEntry(ht);
 				break;
+            case PRINT:
+                ht->printHistogram();
+                break;
 			case EXIT:
 				done = true;
 				break;
+            case GENERATE:
+                generateStudents(ht, first_arr, last_arr, idnumber);
+                break;
 			case 0:
 				cout << "You didn't enter a valid command. \n";
 				break;
@@ -76,13 +86,12 @@ int main() {
 	}
 
 
-  generateStudents(ht, first_arr,last_arr,idnumber);
+ /* generateStudents(ht, first_arr,last_arr,idnumber);
   ht->printHistogram();
+  */
 
   return 0;
 }
-
-void addStudent(HashTable* ht);
 
 //generates a number of students and puts them into the hashtable
 void generateStudents(HashTable* ht, char** first_arr, char** last_arr, int& idnumber)
@@ -104,73 +113,107 @@ void generateStudents(HashTable* ht, char** first_arr, char** last_arr, int& idn
     student->id = idnumber++;
     student->gpa = rand() % 4;
 
-    ht->insertStudent(student);
-    cout << "student data: " << student->first << endl;
+      if(ht->insertStudent(student)) {
+          cout << "Too many collisions! Expanding hashtable." << endl;
+          ht = makeNewThing(ht);
+      }
+    cout << "student data: " << student->first << " " << student->last << endl;
+      cout << "Student number " << i << endl;
   }
 
   cout << atoi(input) << " students generated." << endl;
 }
 
 
-/*
-//prints all the students currently in the directory
-void printAll(vector<Student*> *list) {
- 	if(list->size() == 0) {
-		cout << "No students in the directory." << endl;
-	}
-	for(int i = 0; i < list->size(); i++) {
-		cout << list->at(i)->first << " " << list->at(i)->last << ", " << list->at(i)->id
-			<< ", " << list->at(i)->gpa << endl;
-	}
-}
-
-
-*/
 //compares the input to known commands
 int parseCommand(char *input) {
+    for(int i = 0; i < 0; i++) {
+        *(input+i) = toupper(*(input+i));
+    }
 	if(!strcmp(input, "ADD")) {
 		return ADD;
 	}
 	else if(!strcmp(input, "PRINT")) {
 		return PRINT;
 	}
+    else if(!strcmp(input, "SEARCH")) {
+        return SEARCH;
+    }
 	else if(!strcmp(input, "DELETE")) {
 		return DELETE;
 	}
 	else if(!strcmp(input, "EXIT")) {
 		return EXIT;
 	}
+    else if(!strcmp(input, "GENERATE")) {
+        return GENERATE;
+    }
 	else {
 		return 0;
 	}
 }
 //adds a student the vector: list.
 void addEntry(HashTable* ht) {
-	Student *student = new Student;
+	Student *newstudent = new Student;
+    newstudent->next = NULL;
 
-	cout << "Enter first name: ";
-	cin >> student->first;
+    int id;
+    float gpa;
+    newstudent->first = new char[80];
+    newstudent->last = new char[80];
 
+	
+    cout << "Enter first name: ";
+    cin >> newstudent->first;
 
 	cout << "Enter last name: ";
-  cin >> student->last;
-
-
+    cin >> newstudent->last;
+    
 	cout << "Enter ID number: ";
-	cin >> student->id;
+    cin >> id;
+    newstudent->id = id;
 
 	cout << "Enter GPA: ";
-	cin >> student->gpa;
+    cin >> gpa;
+    newstudent->gpa = gpa;
 
-	ht->insertStudent(student);
+    if(ht->insertStudent(newstudent)) {
+        cout << "Too many collisions! Expanding hashtable." << endl;
+        ht = makeNewThing(ht);
+    }
 	cout << "Student added." << endl;
 }
+
+HashTable* makeNewThing(HashTable* ht) {
+    HashTable* newht = new HashTable(ht->getLength()*2);
+    for(int i = 0; i < ht->getLength(); i++) {
+        Student* stu = ht->array[i].popStudent();
+        Student* temp;
+        while(stu!=NULL) {
+            Student* newStudent = new Student;
+            newStudent->first = new char[80];
+            newStudent->last = new char[80];
+            
+            strcpy(newStudent->first, stu->first);
+            strcpy(newStudent->last, stu->last);
+            newStudent->id = stu->id;
+            newStudent->gpa = stu->gpa;
+            
+            delete stu;
+            newht->insertStudent(newStudent);
+            temp = ht->array[i].popStudent();
+            stu = temp;
+        }
+    }
+    return newht;
+}
+
 
 //deletes an entry by their last name
 //if there is the same last name, returns all students with that name
 void deleteEntry(HashTable* ht) {
-	char* name = new char[100];
-	cout << "Enter the name of the student you want to delete: " << endl;
+	char name[100];
+	cout << "Enter last name of the student you want to delete: " << endl;
 	cin >> name;
   if(ht->removeStudent(name)) {
     cout << "Removed" << endl;
@@ -178,39 +221,25 @@ void deleteEntry(HashTable* ht) {
   else {
     cout << "Student not found in the data base.";
   }
-  /*
-
-  Student* student = ht->array[index];
-
-	//if no head
-	if(student == NULL) {
-		cout << "Student not found";
-		return;
-	}
-
-  //stops when the next student
-  while(student->next != NULL && strcmp(student->next->name, name) {
-    student = student->next;
-  }
-	//if head is the student to delete
-  Student* temp = student->next;
-  if(!strcmp(temp->name, name)) {
-
-  }
-		student = student->next;
-		delete temp;
-		cout << "Student, " << name << " was just deleted from the system" << endl;
-		return;
-	}
-	else {
-		student = student->next;
-		deleteNode(temp, id);
-		head->setNext(temp);
-	}
-
-
-
-	cout << "Student was not found in database" << endl;
-	cin.ignore();
-*/
 }
+
+void searchEntry(HashTable* ht) {
+    char name[100];
+    cout << "Enter last name of the student you want to search: " << endl;
+    cin >> name;
+    if(ht->getStudent(name)) {
+        cout << "Student found. " << endl;
+        printInfo(ht->getStudent(name));
+    }
+    else {
+        cout << "Student with that last name does not exist." << endl;
+    }
+}
+
+void printInfo(Student* stu) {
+    cout << "First: " << stu->first << endl;
+    cout << "Last:  " << stu->last << endl;
+    cout << "ID: " << stu->last << endl;
+    cout << "GPA: " << stu->gpa << endl;
+}
+   
